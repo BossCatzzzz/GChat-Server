@@ -40,6 +40,7 @@ public class GSub_Process extends Thread {
         try {
             STREAM_OUT.writeObject(pkt);
             STREAM_OUT.flush();
+            System.out.println(pkt.toString());
         } catch (IOException ex) {
             GUI.tbMainPn.append("\n[" + ID + "]" + "Error: send(): " + ex.getMessage());
         }
