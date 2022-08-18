@@ -141,6 +141,14 @@ public class GMain_Process implements Runnable {
 //                CLIENTS_PROCESS[index].send(new GPacket("",PACKET.toString()));
 //                getClientThread(packet.recipient).send(new Message("THISISFILE", packet.sender, packet.content, packet.recipient));
                 break;
+            case "THIS IS MESSAGE":
+                if (PACKET.getFirst().equals("<Tất cả>")) {
+                    Announce(new GPacket("THIS IS MESSAGE FOR ALL", CLIENTS_PROCESS[index].USERNAME, PACKET.getLast()));
+                } else {
+                    getSubThreadByUsername(PACKET.getFirst()).send(new GPacket("THIS IS MESSAGE", CLIENTS_PROCESS[index].USERNAME, PACKET.getLast()));
+//                    clients[findClient(ID)].send(new Message(msg.type, msg.sender, msg.content, msg.recipient));
+                }
+                break;
             default:
                 System.out.println("\nGoi chua xac dinh~~~~~~~~~~~~~~\n");
         }
