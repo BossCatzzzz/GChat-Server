@@ -57,6 +57,7 @@ public class GMain_Process implements Runnable {
         GUI.tbPort.setEditable(false);
         GUI.lbIP.setText(IP + ":");
         GUI.btStart.setText("SERVER IS RUNNING...");
+        GUI.btStart.setToolTipText("Server đang hoạt động");
         CLIENTS_PROCESS = new GSub_Process[MAXIMUM_SIZE];
     }
 
@@ -73,7 +74,7 @@ public class GMain_Process implements Runnable {
             //xuong toi day nghia la mot socket moi da dc chap nhan thanh cong...
             //...
             if (TOTAL_CLIENT < CLIENTS_PROCESS.length) {// neu tong so client da ket noi van con nho hon suc chua toi da  
-                GUI.tbMainPn.append("\n---> [" + sck.getPort() + "] :" + sck + " đã kết nối.");
+                GUI.tbMainPn.append("--->[" + sck.getPort() + "] :" + sck + " đã kết nối.\n");
                 CLIENTS_PROCESS[TOTAL_CLIENT] = new GSub_Process(sck, this);
                 CLIENTS_PROCESS[TOTAL_CLIENT].start();
                 TOTAL_CLIENT++;
@@ -111,7 +112,7 @@ public class GMain_Process implements Runnable {
                         CLIENTS_PROCESS[index].send(new GPacket("LOGIN REPONSE", "OKE BABY!"));
                         Announce(new GPacket("ACTIVE USERs", CLIENTS_PROCESS[index].USERNAME));
                         sendActiveUsersListTo(CLIENTS_PROCESS[index].USERNAME);
-
+                        GUI.tbMainPn.append("--->[" + CLIENTS_PROCESS[index].ID + "]: [" + CLIENTS_PROCESS[index].USERNAME + "] đã đăng nhập\n");
                     } else {//                                                    ======= sai tk/mk********
                         CLIENTS_PROCESS[index].send(new GPacket("LOGIN REPONSE", "NO"));
                     }
@@ -132,8 +133,13 @@ public class GMain_Process implements Runnable {
                 }
                 break;
             case "BYE BYE !":
-                Announce(new GPacket("LOGOUT USERs",CLIENTS_PROCESS[index].USERNAME));
+                GUI.tbMainPn.append("--->[" + CLIENTS_PROCESS[index].ID + "]:[" + CLIENTS_PROCESS[index].USERNAME + "] đã thoát\n");
+                Announce(new GPacket("LOGOUT USERs", CLIENTS_PROCESS[index].USERNAME));
                 remove(ID);
+                break;
+            case "THIS IS FILE":
+//                CLIENTS_PROCESS[index].send(new GPacket("",PACKET.toString()));
+//                getClientThread(packet.recipient).send(new Message("THISISFILE", packet.sender, packet.content, packet.recipient));
                 break;
             default:
                 System.out.println("\nGoi chua xac dinh~~~~~~~~~~~~~~\n");
@@ -175,8 +181,8 @@ public class GMain_Process implements Runnable {
 //            gSub_Process.send(gPacket);
 //        }
         for (int i = 0; i < TOTAL_CLIENT; i++) {
-            System.out.println("\n"+CLIENTS_PROCESS[i].ID+":"+CLIENTS_PROCESS[i].USERNAME+"\n");
-            if (!CLIENTS_PROCESS[i].USERNAME.isBlank()&&!CLIENTS_PROCESS[i].USERNAME.isEmpty()) {
+            System.out.println("\n" + CLIENTS_PROCESS[i].ID + ":" + CLIENTS_PROCESS[i].USERNAME + "\n");
+            if (!CLIENTS_PROCESS[i].USERNAME.isBlank() && !CLIENTS_PROCESS[i].USERNAME.isEmpty()) {
                 CLIENTS_PROCESS[i].send(gPacket);
             }
         }
@@ -193,7 +199,7 @@ public class GMain_Process implements Runnable {
 
     private void sendActiveUsersListTo(String NAME) {
         for (int i = 0; i < TOTAL_CLIENT; i++) {
-            if (!CLIENTS_PROCESS[i].USERNAME.isBlank()&&!CLIENTS_PROCESS[i].USERNAME.isEmpty()) {
+            if (!CLIENTS_PROCESS[i].USERNAME.isBlank() && !CLIENTS_PROCESS[i].USERNAME.isEmpty()) {
                 getSubThreadByUsername(NAME).send(new GPacket("ACTIVE USERs", CLIENTS_PROCESS[i].USERNAME));
             }
         }
@@ -214,7 +220,7 @@ public class GMain_Process implements Runnable {
             } catch (IOException ioe) {
                 GUI.tbMainPn.append("\n {1987} Lỗi khi đóng client:[" + ID + "]\n" + ioe.getMessage());
             }
-            GUI.tbMainPn.append("\n---> [" + ID + "]: Client[" + pos + "] đã thoát\n");
+            GUI.tbMainPn.append("--->[" + ID + "]: Client[" + pos + "]:[" + client_exit_thread.USERNAME + "] đã thoát\n");
             client_exit_thread.stop();//... sau do dong thread nay
         }
     }

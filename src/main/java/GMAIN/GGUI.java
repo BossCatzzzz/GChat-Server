@@ -1,5 +1,7 @@
 package GMAIN;
 
+import com.mycenter.gobject.GPacket;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,20 +39,29 @@ public class GGUI extends javax.swing.JFrame {
         setTitle("GCenter - By Gic");
         setMinimumSize(new java.awt.Dimension(500, 600));
         setPreferredSize(new java.awt.Dimension(500, 600));
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         lbIP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbIP.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbIP.setText("localhost : ");
+        lbIP.setToolTipText("Địa chỉ IP");
         jPanel1.add(lbIP);
 
         tbPort.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tbPort.setText("9876");
+        tbPort.setToolTipText("Số cổng");
         jPanel1.add(tbPort);
 
         btStart.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btStart.setText("Start");
+        btStart.setToolTipText("Khởi động Server");
         btStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btStartActionPerformed(evt);
@@ -84,6 +95,16 @@ public class GGUI extends javax.swing.JFrame {
         MAIN_PROCESS = new GMain_Process(this, port);
 
     }//GEN-LAST:event_btStartActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if (JOptionPane.showConfirmDialog(this, "Bạn có muốn dừng máy chủ?", "CHÚ Ý", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            MAIN_PROCESS.stop();
+        } else {
+            this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
 //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">    
     /**
