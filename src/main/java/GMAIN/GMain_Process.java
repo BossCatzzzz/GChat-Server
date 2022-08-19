@@ -75,7 +75,7 @@ public class GMain_Process implements Runnable {
             //xuong toi day nghia la mot socket moi da dc chap nhan thanh cong...
             //...
             if (TOTAL_CLIENT < CLIENTS_PROCESS.length) {// neu tong so client da ket noi van con nho hon suc chua toi da  
-                GUI.tbMainPn.append("--->Client[" + TOTAL_CLIENT + "][" + sck.getPort() + "] :" + sck + " đã kết nối.\n");
+                GUI.tbMainPn.append("--->Client[" + TOTAL_CLIENT + "]-" + sck + " đã kết nối.\n");
                 CLIENTS_PROCESS[TOTAL_CLIENT] = new GSub_Process(sck, this);
                 CLIENTS_PROCESS[TOTAL_CLIENT].start();
                 TOTAL_CLIENT++;
@@ -99,7 +99,7 @@ public class GMain_Process implements Runnable {
     }
 
     //******************************************************************************************************************************************************************
-    synchronized void processor(int ID, GPacket PACKET) {//*************************************************************************************************************
+    synchronized void processor(String ID, GPacket PACKET) {//*************************************************************************************************************
         System.out.println(PACKET.toString());
         int index = indexClient(ID);
         switch (PACKET.getAction()) {
@@ -113,7 +113,7 @@ public class GMain_Process implements Runnable {
                         CLIENTS_PROCESS[index].send(new GPacket("LOGIN REPONSE", "OKE BABY!"));
                         Announce(new GPacket("ACTIVE USERs", CLIENTS_PROCESS[index].USERNAME));
                         sendActiveUsersListTo(CLIENTS_PROCESS[index].USERNAME);
-                        GUI.tbMainPn.append("--->[" + CLIENTS_PROCESS[index].ID + "]: [" + CLIENTS_PROCESS[index].USERNAME + "] đã đăng nhập\n");
+                        GUI.tbMainPn.append("--->Client[" + index + "]:[" + CLIENTS_PROCESS[index].getID() + "]: đã đăng nhập với tên \""+CLIENTS_PROCESS[index].USERNAME +"\"\n");
                     } else {//                                                    ======= sai tk/mk********
                         CLIENTS_PROCESS[index].send(new GPacket("LOGIN REPONSE", "NO"));
                     }
@@ -134,7 +134,7 @@ public class GMain_Process implements Runnable {
                 }
                 break;
             case "BYE BYE !":
-                GUI.tbMainPn.append("--->[" + CLIENTS_PROCESS[index].ID + "]:[" + CLIENTS_PROCESS[index].USERNAME + "] đã thoát\n");
+//                GUI.tbMainPn.append("--->[" + CLIENTS_PROCESS[index].getID() + ":" + CLIENTS_PROCESS[index].USERNAME + "] đã thoát\n");
                 Announce(new GPacket("LOGOUT USERs", CLIENTS_PROCESS[index].USERNAME));
                 remove(ID);
                 break;
@@ -155,9 +155,9 @@ public class GMain_Process implements Runnable {
         }
     }
 
-    int indexClient(int ID) {
+    int indexClient(String ID) {
         for (int i = 0; i < TOTAL_CLIENT; i++) {
-            if (CLIENTS_PROCESS[i].getID() == ID) {
+            if (CLIENTS_PROCESS[i].getID().equals(ID)) {
                 return i;
             }
         }
@@ -190,7 +190,7 @@ public class GMain_Process implements Runnable {
 //            gSub_Process.send(gPacket);
 //        }
         for (int i = 0; i < TOTAL_CLIENT; i++) {
-            System.out.println("\n" + CLIENTS_PROCESS[i].ID + ":" + CLIENTS_PROCESS[i].USERNAME + "\n");
+            System.out.println("\n" + CLIENTS_PROCESS[i].getID() + ":" + CLIENTS_PROCESS[i].USERNAME + "\n");
             if (!CLIENTS_PROCESS[i].USERNAME.isBlank() && !CLIENTS_PROCESS[i].USERNAME.isEmpty()) {
                 CLIENTS_PROCESS[i].send(gPacket);
             }
@@ -214,7 +214,7 @@ public class GMain_Process implements Runnable {
         }
     }
 
-    public synchronized void remove(int ID) {
+    public synchronized void remove(String ID) {
         int pos = indexClient(ID);
         if (pos >= 0) {
             GSub_Process client_exit_thread = CLIENTS_PROCESS[pos];
@@ -229,7 +229,8 @@ public class GMain_Process implements Runnable {
             } catch (IOException ioe) {
                 GUI.tbMainPn.append("\n {1987} Lỗi khi đóng client:[" + ID + "]\n" + ioe.getMessage());
             }
-            GUI.tbMainPn.append("--->[" + ID + "]: Client[" + pos + "]:[" + client_exit_thread.USERNAME + "] đã thoát\n");
+            GUI.tbMainPn.append("--->Client[" + pos + "]:[" + ID + " :" + client_exit_thread.USERNAME + "] đã thoát\n");
+//            GUI.tbMainPn.append("--->[" + CLIENTS_PROCESS[index].getID() + ":" + CLIENTS_PROCESS[index].USERNAME + "] đã thoát\n");
             client_exit_thread.stop();//... sau do dong thread nay
         }
     }
