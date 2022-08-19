@@ -16,6 +16,7 @@ public class GSub_Process extends Thread {
     GMain_Process MAIN_PROCESS = null;
     GGUI GUI = null;
     int ID = -1;// day la port cua client
+    
     String USERNAME = "";
     ObjectInputStream STREAM_IN = null;
     ObjectOutputStream STREAM_OUT = null;

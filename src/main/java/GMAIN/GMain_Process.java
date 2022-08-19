@@ -66,15 +66,16 @@ public class GMain_Process implements Runnable {
         while (THREAD_TO_RUN_THIS_PROCESS != null) {
             Socket sck = null;
             try {
-                sck = MAIN_SERVER_SOCKET.accept();
+                sck = MAIN_SERVER_SOCKET.accept();//*****************************************************
             } catch (IOException ex) {
                 GUI.tbMainPn.append("\n{1902} LỖI KHI CHẤP NHẬN TRUY CẬP:\n" + ex.getMessage());
+                continue;//*******************************************************************************
             }
             //**********************************************************************************
             //xuong toi day nghia la mot socket moi da dc chap nhan thanh cong...
             //...
             if (TOTAL_CLIENT < CLIENTS_PROCESS.length) {// neu tong so client da ket noi van con nho hon suc chua toi da  
-                GUI.tbMainPn.append("--->[" + sck.getPort() + "] :" + sck + " đã kết nối.\n");
+                GUI.tbMainPn.append("--->Client[" + TOTAL_CLIENT + "][" + sck.getPort() + "] :" + sck + " đã kết nối.\n");
                 CLIENTS_PROCESS[TOTAL_CLIENT] = new GSub_Process(sck, this);
                 CLIENTS_PROCESS[TOTAL_CLIENT].start();
                 TOTAL_CLIENT++;
