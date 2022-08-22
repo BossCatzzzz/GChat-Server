@@ -12,14 +12,14 @@ import java.net.Socket;
  */
 public class GSub_Process extends Thread {
 
-    Socket THIS_SOCKET = null;
-    GMain_Process MAIN_PROCESS = null;
-    GGUI GUI = null;
+    private Socket THIS_SOCKET = null;
+    private GMain_Process MAIN_PROCESS = null;
+    private GGUI GUI = null;
     private int PORT = -1;// day la port cua client
-    String IP="";
+    private String IP="";
     String USERNAME = "";
-    ObjectInputStream STREAM_IN = null;
-    ObjectOutputStream STREAM_OUT = null;
+    private ObjectInputStream STREAM_IN = null;
+    private ObjectOutputStream STREAM_OUT = null;
 
     //************************************
     public GSub_Process(Socket sub_socket, GMain_Process main) {
@@ -59,7 +59,7 @@ public class GSub_Process extends Thread {
             try {
                 pkg = (GPacket) STREAM_IN.readObject();
             } catch (Exception ex) {// khi ma ex o day quang ra tuc la streamin bi disconnect -> socket disconnect -> client da thoat
-                GUI.tbMainPn.append("\n---> [" + getID() + "] đã ngắt kết nối:" + ex.getMessage());
+                GUI.tbMainPn.append("\n---> [" + getID() + "] đã ngắt kết nối: " + ex.getMessage()+"\n");
                 MAIN_PROCESS.remove(getID());// xoa client nay
                 stop();//sau do stop thread nay
             }

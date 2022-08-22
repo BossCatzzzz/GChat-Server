@@ -113,7 +113,7 @@ public class GMain_Process implements Runnable {
                         CLIENTS_PROCESS[index].send(new GPacket("LOGIN REPONSE", "OKE BABY!"));
                         Announce(new GPacket("ACTIVE USERs", CLIENTS_PROCESS[index].USERNAME));
                         sendActiveUsersListTo(CLIENTS_PROCESS[index].USERNAME);
-                        GUI.tbMainPn.append("--->Client[" + index + "]:[" + CLIENTS_PROCESS[index].getID() + "]: đã đăng nhập với tên \""+CLIENTS_PROCESS[index].USERNAME +"\"\n");
+                        GUI.tbMainPn.append("--->Client[" + index + "]:[" + CLIENTS_PROCESS[index].getID() + "]: đã đăng nhập với tên \"" + CLIENTS_PROCESS[index].USERNAME + "\"\n");
                     } else {//                                                    ======= sai tk/mk********
                         CLIENTS_PROCESS[index].send(new GPacket("LOGIN REPONSE", "NO"));
                     }
@@ -132,6 +132,12 @@ public class GMain_Process implements Runnable {
                 } else {
                     CLIENTS_PROCESS[index].send(new GPacket("LOGIN REPONSE", "EXISTS"));
                 }
+                break;
+            case "LOGOUT":
+                Announce(new GPacket("LOGOUT USERs", CLIENTS_PROCESS[index].USERNAME));
+                GUI.tbMainPn.append("--->Client[" + index + "]:[" + ID + " :" + CLIENTS_PROCESS[index].USERNAME + "] đã thoát\n");
+                CLIENTS_PROCESS[index].USERNAME = "";
+
                 break;
             case "BYE BYE !":
 //                GUI.tbMainPn.append("--->[" + CLIENTS_PROCESS[index].getID() + ":" + CLIENTS_PROCESS[index].USERNAME + "] đã thoát\n");
@@ -228,6 +234,7 @@ public class GMain_Process implements Runnable {
                 client_exit_thread.close();// dong tat cac luong in, out, socket truoc...
             } catch (IOException ioe) {
                 GUI.tbMainPn.append("\n {1987} Lỗi khi đóng client:[" + ID + "]\n" + ioe.getMessage());
+                return;
             }
             GUI.tbMainPn.append("--->Client[" + pos + "]:[" + ID + " :" + client_exit_thread.USERNAME + "] đã thoát\n");
 //            GUI.tbMainPn.append("--->[" + CLIENTS_PROCESS[index].getID() + ":" + CLIENTS_PROCESS[index].USERNAME + "] đã thoát\n");
