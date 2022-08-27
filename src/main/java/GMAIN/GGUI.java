@@ -1,7 +1,6 @@
 package GMAIN;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.mycenter.gobject.GPacket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
