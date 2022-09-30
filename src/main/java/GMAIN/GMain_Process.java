@@ -11,7 +11,7 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 
 /**
  *
- * @author Gic
+ * @author Gic da update ngay luc nay
  */
 public class GMain_Process implements Runnable {
 
@@ -114,6 +114,7 @@ public class GMain_Process implements Runnable {
                         Announce(new GPacket("ACTIVE USERs", CLIENTS_PROCESS[index].USERNAME));
                         sendActiveUsersListTo(CLIENTS_PROCESS[index].USERNAME);
                         GUI.tbMainPn.append("--->Client[" + index + "]:[" + CLIENTS_PROCESS[index].getID() + "]: đã đăng nhập với tên \"" + CLIENTS_PROCESS[index].USERNAME + "\"\n");
+                        
                     } else {//                                                    ======= sai tk/mk********
                         CLIENTS_PROCESS[index].send(new GPacket("LOGIN REPONSE", "NO"));
                     }
